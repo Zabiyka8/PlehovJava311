@@ -18,10 +18,18 @@ public class TechCart extends BaseEntity {
     @ManyToOne
     private Pizza pizza;
 
+    @Column(name = "amount")
+    private Integer amount;
+
     @ManyToOne
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
+
+
 
 
     public TechCart() {
     }
+
+
 }

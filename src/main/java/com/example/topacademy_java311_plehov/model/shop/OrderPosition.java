@@ -1,8 +1,8 @@
 package com.example.topacademy_java311_plehov.model.shop;
 
 import com.example.topacademy_java311_plehov.model.BaseEntity;
+import com.example.topacademy_java311_plehov.model.entities.stock.entities.Ingredient;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Pizza;
-import com.example.topacademy_java311_plehov.model.entities.stock.entities.Topping;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,18 +16,27 @@ import java.util.Set;
 @Setter
 @Builder
 @Entity
-@Table(name = "orderPosition_t")
+@Table(name = "order_position_t")
 @AllArgsConstructor
 public class OrderPosition extends BaseEntity {
     @Column(name = "amount")
     private Integer quantity;
 
-
-
     @ManyToOne
+    private Order order;
+
+    @OneToOne
+    @JoinColumn(name = "pizza_id")
     private Pizza pizza;
 
-    public OrderPosition() {
+    @OneToMany
+    private Set<Ingredient> ingredientSet;
 
+    @Column(name = "note")
+    private String note;
+
+
+    public OrderPosition() {
+        ingredientSet = new HashSet<>();
     }
 }

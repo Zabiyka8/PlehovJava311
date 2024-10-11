@@ -17,20 +17,22 @@ import java.util.Set;
 public class Order extends BaseEntity {
     @Column(name = "isPaid")
     private Boolean isPaid;
-    @Column(name = "priceOrder")
-    private Double priceOrder;
+    @Column(name = "price")
+    private Double price;
 
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private Set<Shop> order;
+//    @JoinColumn(name = "order_position_id")
+    private Set<OrderPosition> orderPositions;
+
+
+    @ManyToOne
+    private Shop shop;
+
+    @ManyToOne
+    private User user;
 
     public Order() {
-        order = new HashSet<>();
-        orders = new HashSet<>();
+        orderPositions = new HashSet<>();
     }
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private Set<User> orders;
 }

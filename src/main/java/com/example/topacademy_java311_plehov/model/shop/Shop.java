@@ -4,13 +4,15 @@ import com.example.topacademy_java311_plehov.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
 @Entity
 @Table(name = "shop_t")
 @AllArgsConstructor
-@NoArgsConstructor
 public class Shop extends BaseEntity {
     @Column(name = "name")
     private String name;
@@ -18,9 +20,13 @@ public class Shop extends BaseEntity {
     private String phone;
 
 
-    @ManyToOne
-    private Order order;
+    @OneToMany
+    @JoinColumn(name = "shop_id")
+    private Set<Order> orders;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "stock_id")
     private Stock stock;
+
+    public Shop(){orders = new HashSet<>();}
 }

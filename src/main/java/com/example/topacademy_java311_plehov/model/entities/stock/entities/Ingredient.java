@@ -1,6 +1,7 @@
 package com.example.topacademy_java311_plehov.model.entities.stock.entities;
 
 import com.example.topacademy_java311_plehov.model.BaseEntity;
+import com.example.topacademy_java311_plehov.model.shop.OrderPosition;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,29 +14,22 @@ import java.util.Set;
 @Entity
 @Table(name = "ingredient_t")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Ingredient extends BaseEntity {
     @Column(name = "name")
     private String name;
     @Column(name = "amount")
-    private Integer quantity;
-    @Column(name = "inStock")
-    private boolean inStock;
+    private Integer amount;
+    @Column(name = "price")
+    private Double price;
 
-    @OneToMany
-    @JoinColumn(name = "ingredient_id")
-    private Set<TechCart> techCarts;
+//    @ManyToOne
+//    private OrderPosition orderPosition;
 
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "ingredient_id")
-//    private Set<Pizza> ingredients;
-//
 
-    public Ingredient() {
-        techCarts = new HashSet<>();
-//        ingredients = new HashSet<>();
-
+    public boolean isInStock(Integer quantity){
+        return this.amount >= quantity;
     }
-
 
 }

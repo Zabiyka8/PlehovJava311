@@ -29,27 +29,16 @@ public class Pizza extends BaseEntity {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private Type type;
-    @Column(name = "note")
-    private String note;
-//    @Column(name = "Set<ingredient>")
-//    private Set<Ingredient> ingredient;
 
+    @OneToOne(mappedBy = "pizza")
+    private OrderPosition orderPosition;
 
-
-    @ManyToOne
-    private Topping topping;
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "pizza_id")
-    private Set<OrderPosition> pizza;
-
-    @OneToMany
-    @JoinColumn(name = "pizza_id")
-    private Set<TechCart> pizzas;
+    private Set<TechCart> techCart;
 
     public Pizza() {
-        pizza = new HashSet<>();
-        pizzas = new HashSet<>();
+        techCart = new HashSet<>();
     }
 }
 

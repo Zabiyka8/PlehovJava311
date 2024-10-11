@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -13,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "role_t")
 @AllArgsConstructor
-@NoArgsConstructor
 public class Role extends BaseEntity implements GrantedAuthority {
     @Column(name = "name_role")
     private String name;
@@ -24,9 +24,11 @@ public class Role extends BaseEntity implements GrantedAuthority {
     @Column(name = "change_user_status")
     private boolean change_user_status;
 
-
     @OneToMany
+    @JoinColumn(name = "role_id")
     private Set<User> users;
+
+    public Role(){users = new HashSet<>();}
 
     @Override
     public String getAuthority() {

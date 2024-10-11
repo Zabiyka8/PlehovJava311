@@ -13,15 +13,14 @@ import java.util.Set;
 @Entity
 @Table(name = "stock_t")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Stock extends BaseEntity {
     @Column(name = "name")
     private String name;
     @Column(name = "amount")
     private Integer amount;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "stock_id")
-    private Set<Shop> stock;
+    @OneToOne(mappedBy = "stock")
+    private Shop shop;
 
-    public Stock() {stock = new HashSet<>();}
 }
