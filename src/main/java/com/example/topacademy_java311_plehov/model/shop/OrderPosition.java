@@ -1,8 +1,8 @@
 package com.example.topacademy_java311_plehov.model.shop;
 
 import com.example.topacademy_java311_plehov.model.BaseEntity;
-import com.example.topacademy_java311_plehov.model.entities.stock.entities.Ingredient;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Pizza;
+import com.example.topacademy_java311_plehov.model.entities.stock.entities.Topping;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,13 +30,14 @@ public class OrderPosition extends BaseEntity {
     private Pizza pizza;
 
     @OneToMany
-    private Set<Ingredient> ingredientSet;
+    @JoinColumn(name = "order_position_id")
+    private Set<Topping> toppings;
 
     @Column(name = "note")
     private String note;
 
 
     public OrderPosition() {
-        ingredientSet = new HashSet<>();
+        toppings = new HashSet<>();
     }
 }

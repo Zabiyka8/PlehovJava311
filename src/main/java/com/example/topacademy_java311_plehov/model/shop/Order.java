@@ -22,7 +22,7 @@ public class Order extends BaseEntity {
 
 
     @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "order_position_id")
+    @JoinColumn(name = "order_id")
     private Set<OrderPosition> orderPositions;
 
 

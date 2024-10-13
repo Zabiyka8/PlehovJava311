@@ -14,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "ingredient_t")
 @AllArgsConstructor
-@NoArgsConstructor
 public class Ingredient extends BaseEntity {
     @Column(name = "name")
     private String name;
@@ -23,9 +22,13 @@ public class Ingredient extends BaseEntity {
     @Column(name = "price")
     private Double price;
 
-//    @ManyToOne
-//    private OrderPosition orderPosition;
+    @OneToMany
+    @JoinColumn(name = "ingredient_id")
+    private Set<Topping> toppings;
 
+    public Ingredient() {
+        toppings = new HashSet<>();
+    }
 
 
     public boolean isInStock(Integer quantity){
