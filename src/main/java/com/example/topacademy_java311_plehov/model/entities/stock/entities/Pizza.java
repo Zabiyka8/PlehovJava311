@@ -23,12 +23,14 @@ public class Pizza extends BaseEntity {
     private String name;
     @Column(name = "price")
     private Double price;
+
     @Column(name = "size")
     @Enumerated(EnumType.STRING)
     private Size size;
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private Type type;
+
 
     @OneToOne(mappedBy = "pizza")
     private OrderPosition orderPosition;

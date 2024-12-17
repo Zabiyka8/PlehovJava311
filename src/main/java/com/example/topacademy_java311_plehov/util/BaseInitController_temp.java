@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/s")
 @RequiredArgsConstructor
-public class BaseInitController {
+public class BaseInitController_temp {
 
 
-    @GetMapping
+    @GetMapping("/init")
     public void init(){
 
 
     }
+
+
 }

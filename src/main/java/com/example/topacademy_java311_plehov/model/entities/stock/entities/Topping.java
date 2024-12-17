@@ -16,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Topping extends BaseEntity {
+
     @ManyToOne
     private Ingredient ingredient;
 

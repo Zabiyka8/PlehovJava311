@@ -1,5 +1,6 @@
 package com.example.topacademy_java311_plehov.model.entities.stock.entities;
 
+
 import com.example.topacademy_java311_plehov.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
