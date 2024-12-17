@@ -26,8 +26,6 @@ public class Order extends BaseEntity {
     private Set<OrderPosition> orderPositions;
 
 
-    @ManyToOne
-    private Shop shop;
 
     @ManyToOne
     private User user;

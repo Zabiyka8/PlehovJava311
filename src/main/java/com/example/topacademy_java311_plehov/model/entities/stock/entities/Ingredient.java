@@ -21,7 +21,8 @@ public class Ingredient extends BaseEntity {
     private Integer amount;
     @Column(name = "price")
     private Double price;
-
+    @Column(name = "inStock")
+    private Integer inStock;
     @OneToMany
     @JoinColumn(name = "ingredient_id")
     private Set<Topping> toppings;
