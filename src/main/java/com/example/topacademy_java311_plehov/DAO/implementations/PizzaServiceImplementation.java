@@ -17,17 +17,17 @@ public class PizzaServiceImplementation implements PizzaService {
 
     @Override
     public List<Pizza> findAll() {
-        return null;
+        return repo.findAll();
     }
 
     @Override
     public Optional<Pizza> findById(int id) {
-        return Optional.empty();
+        return repo.findById(id);
     }
 
     @Override
     public Pizza save(Pizza pizza) {
-        return null;
+        return repo.save(pizza);
     }
 
     @Override

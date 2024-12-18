@@ -20,20 +20,19 @@ public class Ingredient extends BaseEntity {
     @Column(name = "amount")
     private Integer amount;
     @Column(name = "price")
-    private Double price;
+    private int price;
     @Column(name = "inStock")
     private Integer inStock;
     @OneToMany
     @JoinColumn(name = "ingredient_id")
     private Set<Topping> toppings;
+    @OneToMany
+    @JoinColumn(name = "ingredient_id")
+    private Set<TechCart> techCarts;
 
     public Ingredient() {
         toppings = new HashSet<>();
+        techCarts = new HashSet<>();
+
     }
-
-
-    public boolean isInStock(Integer quantity){
-        return this.amount >= quantity;
-    }
-
 }

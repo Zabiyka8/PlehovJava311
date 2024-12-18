@@ -15,17 +15,17 @@ public class ToppingServiceImplementation implements ToppingService {
 
     @Override
     public List<Topping> findAll() {
-        return null;
+        return repo.findAll();
     }
 
     @Override
     public Optional<Topping> findById(int id) {
-        return Optional.empty();
+        return repo.findById(id);
     }
 
     @Override
-    public Topping save(Topping additionalService) {
-        return null;
+    public Topping save(Topping topping) {
+        return repo.save(topping);
     }
 
     @Override

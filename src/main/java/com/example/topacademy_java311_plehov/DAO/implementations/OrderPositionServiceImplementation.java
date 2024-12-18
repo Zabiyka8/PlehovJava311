@@ -17,17 +17,17 @@ public class OrderPositionServiceImplementation implements OrderPositionService 
 
     @Override
     public List<OrderPosition> findAll() {
-        return null;
+        return repo.findAll();
     }
 
     @Override
     public Optional<OrderPosition> findById(int id) {
-        return Optional.empty();
+        return repo.findById(id);
     }
 
     @Override
     public OrderPosition save(OrderPosition orderPosition) {
-        return null;
+        return repo.save(orderPosition);
     }
 
     @Override

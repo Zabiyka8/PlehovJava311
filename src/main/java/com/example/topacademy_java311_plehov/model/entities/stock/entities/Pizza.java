@@ -22,7 +22,7 @@ public class Pizza extends BaseEntity {
     @Column(name = "name")
     private String name;
     @Column(name = "price")
-    private Double price;
+    private int price;
 
     @Column(name = "size")
     @Enumerated(EnumType.STRING)

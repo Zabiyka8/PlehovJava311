@@ -18,21 +18,26 @@ public class IngredientServiceImplementation implements IngredientService {
 
     @Override
     public List<Ingredient> findAll() {
-        return null;
+        return repo.findAll();
     }
 
     @Override
     public Optional<Ingredient> findById(int id) {
-        return Optional.empty();
+        return repo.findById(id);
     }
 
     @Override
     public Ingredient save(Ingredient ingredient) {
-        return null;
+        return repo.save(ingredient);
     }
 
     @Override
     public void deleteById(int id) {
 
+    }
+
+    @Override
+    public Object findByName(String name) {
+        return null;
     }
 }

@@ -23,14 +23,8 @@ public class TechCart extends BaseEntity {
     private Integer amount;
 
     @ManyToOne
-    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
-
-
-
 
     public TechCart() {
     }
-
-
 }
