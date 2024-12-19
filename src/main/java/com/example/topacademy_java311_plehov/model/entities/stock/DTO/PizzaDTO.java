@@ -10,6 +10,6 @@ import java.util.List;
 @Builder
 public class PizzaDTO {
     private Long id;
-    private List<TechCart> techCart;
+    private String techCart;
     private String name;
 }

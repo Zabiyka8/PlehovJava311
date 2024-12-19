@@ -5,5 +5,5 @@ import com.example.topacademy_java311_plehov.model.entities.stock.entities.TechC
 import java.util.List;
 
 public interface TechCartService extends DAO<TechCart>{
-    List<TechCart> findTechCartByPizzaId(Long pizzaId);
+    List<String> findTechCartByPizzaId(Long pizzaId);
 }
