@@ -1,6 +1,7 @@
 package com.example.topacademy_java311_plehov.DAO.implementations;
 
 import com.example.topacademy_java311_plehov.DAO.services.PizzaService;
+import com.example.topacademy_java311_plehov.model.entities.stock.entities.Ingredient;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Pizza;
 import com.example.topacademy_java311_plehov.repositories.PizzaRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,11 @@ public class PizzaServiceImplementation implements PizzaService {
     @Override
     public void deleteById(int id) {
 
+    }
+
+    @Override
+    public Pizza findByName(String name) {
+        Optional<Pizza> pizzaOptional = repo.findByName(name);
+        return pizzaOptional.get();
     }
 }

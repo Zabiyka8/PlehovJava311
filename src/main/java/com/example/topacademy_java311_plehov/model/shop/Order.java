@@ -1,7 +1,7 @@
 package com.example.topacademy_java311_plehov.model.shop;
 
 import com.example.topacademy_java311_plehov.model.BaseEntity;
-import com.example.topacademy_java311_plehov.model.secuirty.User;
+import com.example.topacademy_java311_plehov.model.entities.itemAttributes.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,10 +15,11 @@ import java.util.Set;
 @Table(name = "order_t")
 @AllArgsConstructor
 public class Order extends BaseEntity {
-    @Column(name = "isPaid")
-    private Boolean isPaid;
     @Column(name = "price")
     private Double price;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -28,7 +29,7 @@ public class Order extends BaseEntity {
 
 
     @ManyToOne
-    private User user;
+    private Profile profile;
 
     public Order() {
         orderPositions = new HashSet<>();

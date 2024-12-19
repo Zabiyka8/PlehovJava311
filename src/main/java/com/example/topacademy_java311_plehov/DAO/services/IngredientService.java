@@ -4,6 +4,5 @@ import com.example.topacademy_java311_plehov.model.entities.stock.entities.Ingre
 
 
 public interface IngredientService extends DAO<Ingredient> {
-
-    Object findByName(String name);
+    Ingredient findByName(String name);
 }

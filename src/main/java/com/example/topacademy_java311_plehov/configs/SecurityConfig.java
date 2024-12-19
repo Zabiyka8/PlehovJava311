@@ -3,7 +3,7 @@ package com.example.topacademy_java311_plehov.configs;
 
 
 import com.example.topacademy_java311_plehov.model.secuirty.UserDetailsServiceImplementation;
-import com.example.topacademy_java311_plehov.repositories.UserRepository;
+import com.example.topacademy_java311_plehov.repositories.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final DataSource dataSource;
-    private final UserRepository userRepository;
+    private final ApplicationUserRepository applicationUserRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -57,7 +57,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImplementation(userRepository);
+        return new UserDetailsServiceImplementation(applicationUserRepository);
     }
 
     @Bean

@@ -35,9 +35,9 @@ public class IngredientServiceImplementation implements IngredientService {
     public void deleteById(int id) {
 
     }
-
     @Override
-    public Object findByName(String name) {
-        return null;
+    public Ingredient findByName(String name) {
+        Optional<Ingredient> ingredientOptional = repo.findByName(name);
+        return ingredientOptional.orElse(null);
     }
 }
