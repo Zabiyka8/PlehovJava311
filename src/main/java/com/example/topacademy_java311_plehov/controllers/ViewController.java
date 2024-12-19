@@ -3,8 +3,6 @@ package com.example.topacademy_java311_plehov.controllers;
 import com.example.topacademy_java311_plehov.DAO.services.PizzaService;
 import com.example.topacademy_java311_plehov.DAO.services.TechCartService;
 import com.example.topacademy_java311_plehov.model.entities.stock.DTO.PizzaDTO;
-import com.example.topacademy_java311_plehov.model.entities.stock.entities.Ingredient;
-import com.example.topacademy_java311_plehov.model.entities.stock.entities.Pizza;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.TechCart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,17 +22,11 @@ public class ViewController {
 
     @GetMapping
     public String index(Model model){
-        List<TechCart> pizzas = techCartService.findAll().stream()
-                .map(pizza -> TechCart.builder()
-                        .ingredient(Ingredient.builder()
-                                .name(pizza.getIngredient().getName())
-                                .build())
-                        .pizza(Pizza.builder()
-                                .type(pizza.getPizza().getType())
-                                .size(pizza.getPizza().getSize())
-                                .price(pizza.getPizza().getPrice())
-                                .name(pizza.getPizza().getName())
-                                .build())
+        List<PizzaDTO> pizzas = pizzaService.findAll().stream()
+                .map(pizza -> PizzaDTO.builder()
+                        .id(pizza.getId())
+                        .name(pizza.getName())
+                        .techCart(techCartService.findTechCartByPizzaId(pizza.getId()))
                         .build())
                 .toList();
 

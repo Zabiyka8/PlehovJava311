@@ -13,10 +13,10 @@
 
                 <div class="pizza">
                     <div class="category_img">
-                        <img th:src="@{'/img/' + ${pizza.pizza.name} + '.png'}"/>
+                        <img th:src="@{'/img/' + ${pizza.name} + '.png'}"/>
                     </div>
                     <div class="pizza_caption">
-                        [[${pizza.pizza.name}]]
+                        [[${pizza.name}]]
                     </div>
                     <div>
                         <p th:text="${pizza.techCart}"></p>
