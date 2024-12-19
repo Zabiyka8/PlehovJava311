@@ -33,6 +33,6 @@ public class ProfileServiceImplementation implements ProfileService {
 
     @Override
     public void deleteById(int id) {
-
+        repo.deleteById(id);
     }
 }

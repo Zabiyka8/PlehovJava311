@@ -7,13 +7,24 @@
 </head>
 <body>
 <div>
-    <img src="/img/барбекю.png">
-    <img src="/img/верона.png">
-    <img src="/img/гавайская.png">
-    <img src="/img/мясная.png">
-    <img src="/img/пеперони.png">
-    <img src="/img/цезарь.png">
+    <div class="shop">
+        <div class="pizzas">
+            <div th:each="pizza: ${pizzas}">
 
+                <div class="pizza">
+                    <div class="category_img">
+                        <img th:src="@{'/img/' + ${pizza.pizza.name} + '.png'}"/>
+                    </div>
+                    <div class="pizza_caption">
+                        [[${pizza.pizza.name}]]
+                    </div>
+                    <div>
+                        <p th:text="${pizza.techCart}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

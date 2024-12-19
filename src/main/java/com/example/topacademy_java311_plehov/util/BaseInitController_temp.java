@@ -34,16 +34,14 @@ public class BaseInitController_temp {
     private Ingredient ingredientTemp;
 
     private final ApplicationUserRepository appUserRepo;
-//
-
     private final PasswordEncoder encoder;
-
     @GetMapping("/init")
     public void init() throws IOException {
         ingredientInit();
+        usersInit();
 //        usersInit();
         if (pizzaService.findById(1).isEmpty()) {
-            List.of("БАРБЕКЮ", "ВЕРОНА", "ГАВАЙСКАЯ", "МЯСНАЯ", "ПЕПЕРОНИ", "ЦЕЗАРЬ")
+            List.of("Барбекю", "Верона", "Гавайская", "Мясная", "Пеперони", "Цезарь")
                     .forEach(pizza -> {
                         Pizza newPizza = pizzaService.save(Pizza.builder()
                                 .name(pizza)
@@ -53,36 +51,36 @@ public class BaseInitController_temp {
                                 .build());
 
                         List<Ingredient> selectedIngredients = switch (pizza) {
-                            case "БАРБЕКЮ" -> List.of(
+                            case "Барбекю" -> List.of(
                                     ingredientService.findByName("куринная грудка"),
                                     ingredientService.findByName("сыр моцарелла"),
                                     ingredientService.findByName("бекон"),
                                     ingredientService.findByName("ветчина"),
                                     ingredientService.findByName("пепперони"),
                                     ingredientService.findByName("соус"));
-                            case "ГАВАЙСКАЯ" -> List.of(
+                            case "Гавайская" -> List.of(
                                     ingredientService.findByName("сыр моцарелла"),
                                     ingredientService.findByName("ананас"),
                                     ingredientService.findByName("ветчина"),
                                     ingredientService.findByName("соус"));
-                            case "ПЕПЕРОНИ" -> List.of(
+                            case "Пеперони" -> List.of(
                                     ingredientService.findByName("сыр моцарелла"),
                                     ingredientService.findByName("соус"),
                                     ingredientService.findByName("пепперони"));
-                            case "МЯСНАЯ" -> List.of(
+                            case "Мясная" -> List.of(
                                     ingredientService.findByName("говядина"),
                                     ingredientService.findByName("ветчина"),
                                     ingredientService.findByName("бекон"),
                                     ingredientService.findByName("соус"),
                                     ingredientService.findByName("свинина"),
                                     ingredientService.findByName("пепперони"));
-                            case "ЦЕЗАРЬ" -> List.of(
+                            case "Цезарь" -> List.of(
                                     ingredientService.findByName("соус"),
                                     ingredientService.findByName("сыр моцарелла"),
                                     ingredientService.findByName("помидор"),
                                     ingredientService.findByName("куринная грудка"),
                                     ingredientService.findByName("бекон"));
-                            case "ВЕРОНА" -> List.of(
+                            case "Верона" -> List.of(
                                     ingredientService.findByName("соус"),
                                     ingredientService.findByName("шампиньон"),
                                     ingredientService.findByName("помидор"),
@@ -122,54 +120,10 @@ public class BaseInitController_temp {
             }
         }
     }
-
     private void usersInit() {
         ApplicationUser admin = new ApplicationUser("employee@ya.ru", encoder.encode("user1"));
         ApplicationUser user = new ApplicationUser("user@ya.ru", encoder.encode("user"));
-
         appUserRepo.save(admin);
         appUserRepo.save(user);
     }
-
-//    public void usersInit() {
-//        // Создание или получение ролей
-//        Role anonymousRole = new Role("ANONYMOUS", true, true, true); // Пример роли администратора
-//        Role userRole = new Role("USER", false, false, false); // Пример роли пользователя
-//
-//        // Сохранение ролей, чтобы использовать их позже
-//        // Если в базе уже существует эта роль, можно использовать другой механизм получения или удаления старой роли
-//        // В противном случае роли будут сохранены сразу
-//        anonymousRole = roleRepo.save(anonymousRole);
-//        userRole = roleRepo.save(userRole);
-//
-//        // Создание профиля для пользователя
-//        Profile anonymousProfile = Profile.builder()
-//                .email("anonymous@ya.ru")
-//                .name("Anonymous User")
-//                .build();
-//
-//        Profile userProfile = Profile.builder()
-//                .email("user@ya.ru")
-//                .name("Normal User")
-//                .build();
-//
-//        // Создание пользователей
-//        User anonymous = User.builder()
-//                .username("anonymous@ya.ru")
-//                .password(encoder.encode("anonymous"))
-//                .profile(anonymousProfile)
-//                .role(userRole)  // Укажите роль пользователя
-//                .build();
-//
-//        User user = User.builder()
-//                .username("user@ya.ru")
-//                .password(encoder.encode("user"))
-//                .profile(userProfile)
-//                .role(userRole)  // Укажите роль пользователя
-//                .build();
-//
-//        // Сохранение пользователей в репозитории
-//        userRepo.save(anonymous);
-//        userRepo.save(user);
-//    }
 }

@@ -30,6 +30,6 @@ public class ToppingServiceImplementation implements ToppingService {
 
     @Override
     public void deleteById(int id) {
-
+        repo.deleteById(id);
     }
 }

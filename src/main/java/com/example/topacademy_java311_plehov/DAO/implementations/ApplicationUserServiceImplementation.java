@@ -36,7 +36,7 @@ public class ApplicationUserServiceImplementation implements ApplicationUserServ
 
     @Override
     public void deleteById(int id) {
-
+        repo.deleteById(id);
     }
 
     @Override

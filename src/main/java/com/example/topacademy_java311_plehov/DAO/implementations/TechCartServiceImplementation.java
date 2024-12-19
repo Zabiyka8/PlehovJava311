@@ -31,6 +31,11 @@ public class TechCartServiceImplementation implements TechCartService {
 
     @Override
     public void deleteById(int id) {
+        repo.deleteById(id);
+    }
 
+    @Override
+    public List<TechCart> findTechCartByPizzaId(Long pizzaId) {
+        return repo.findTechCartByPizzaId(pizzaId);
     }
 }

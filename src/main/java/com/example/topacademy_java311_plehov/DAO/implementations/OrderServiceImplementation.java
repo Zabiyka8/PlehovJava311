@@ -32,6 +32,6 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public void deleteById(int id) {
-
+        repo.deleteById(id);
     }
 }

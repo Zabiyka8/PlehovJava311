@@ -33,7 +33,7 @@ public class IngredientServiceImplementation implements IngredientService {
 
     @Override
     public void deleteById(int id) {
-
+        repo.deleteById(id);
     }
     @Override
     public Ingredient findByName(String name) {
