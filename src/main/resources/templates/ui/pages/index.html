@@ -4,28 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet"/>
+    <link rel="stylesheet" href="/styles/style.css"/>
 </head>
 <body>
-<div>
-    <div class="shop">
-        <div class="pizzas">
-            <div th:each="pizza: ${pizzas}">
 
-                <div class="pizza">
-                    <div class="category_img">
-                        <img th:src="@{'/img/' + ${pizza.name} + '.png'}"/>
+<div class="container">
+
+    <div class="placeholder">
+        <div class="parallax-window" data-parallax="scroll" data-image-src="img/simple-house-01.jpg">
+            <div class="tm-header">
+                <div class="row tm-header-inner">
+                    <div class="col-md-6 col-12">
+                        <img src="" alt="Logo" class="tm-site-logo"/>
+                        <div class="tm-site-text-box">
+                            <h1 class="tm-site-title">Simple House</h1>
+                            <h6 class="tm-site-description">new restaurant template</h6>
+                        </div>
                     </div>
-                    <div class="pizza_caption">
-                        [[${pizza.name}]]
-                    </div>
-                    <div>
-                        <p th:text="${pizza.techCart}"></p>
-                    </div>
+                    <nav class="col-md-6 col-12 tm-nav">
+                        <ul class="tm-nav-ul">
+                            <li class="tm-nav-li"><a href="index.html" class="tm-nav-link active">Home</a></li>
+                            <li class="tm-nav-li"><a href="about.html" class="tm-nav-link">About</a></li>
+                            <li class="tm-nav-li"><a href="contact.html" class="tm-nav-link">Contact</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+
+    <div class="tm-paging-links">
+        <nav>
+            <ul>
+                <li class="tm-paging-item"><a href="#" class="tm-paging-link active">Pizza</a></li>
+                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Salad</a></li>
+                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Noodle</a></li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <div class="row tm-gallery">
+        <div id="tm-gallery-page-pizza" class="tm-gallery-page">
+
+            <div th:each="pizza: ${pizzas}">
+
+                <div class="item">
+                    <figure class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
+                        <div class="box_img">
+                            <img th:src="@{'/img/' + ${pizza.name} + '.png'}" class="img-fluid tm-gallery-img"/>
+                        </div>
+                        <figcaption>
+                            <!--                        <div class="pizza_caption">-->
+                            <h4 class="tm-gallery-title">[[${pizza.name}]]</h4>
+                            <!--                        </div>-->
+                            <div class="box_description">
+                                <p class="tm-gallery-description" th:text="${pizza.techCart}"></p>
+                            </div>
+                            <div class="box_price">
+                                <p class="tm-gallery-price" th:text="${pizza.price + ' &#8381;'}"></p>
+                                <button class="button_bay">В корзину</button>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="path/to/jquery.parallax.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/parallax.min.js"></script>
 </body>
 </html>

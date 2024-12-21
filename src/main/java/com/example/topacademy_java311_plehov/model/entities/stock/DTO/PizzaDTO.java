@@ -12,4 +12,5 @@ public class PizzaDTO {
     private Long id;
     private String techCart;
     private String name;
+    private int price;
 }

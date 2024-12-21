@@ -1,7 +1,6 @@
 package com.example.topacademy_java311_plehov.DAO.implementations;
 
 import com.example.topacademy_java311_plehov.DAO.services.TechCartService;
-import com.example.topacademy_java311_plehov.model.entities.stock.entities.Ingredient;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.TechCart;
 import com.example.topacademy_java311_plehov.repositories.TechCartRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
