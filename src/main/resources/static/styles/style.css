@@ -187,13 +187,12 @@ p, address {
 .placeholder {
     width: 100%;
     min-height: 460px;
-    background-image: url("static/img/simple-house-01.jpg");
+    /*background-image: url("static/img/simple-house-01.jpg");*/
     background-color: #556E5B;
 }
 
 .parallax-window {
     min-height: 460px;
-    background-image: url("static/img/simple-house-01.jpg");
     position: relative;
 }
 

@@ -13,7 +13,7 @@
 
     <div class="placeholder">
         <div class="parallax-window" data-parallax="scroll" data-image-src="img/simple-house-01.jpg">
-            <div class="tm-header">
+                <div class="tm-header">
                 <div class="row tm-header-inner">
                     <div class="col-md-6 col-12">
                         <img src="" alt="Logo" class="tm-site-logo"/>
@@ -24,9 +24,18 @@
                     </div>
                     <nav class="col-md-6 col-12 tm-nav">
                         <ul class="tm-nav-ul">
-                            <li class="tm-nav-li"><a href="index.html" class="tm-nav-link active">Home</a></li>
-                            <li class="tm-nav-li"><a href="about.html" class="tm-nav-link">About</a></li>
-                            <li class="tm-nav-li"><a href="contact.html" class="tm-nav-link">Contact</a></li>
+                            <li class="tm-nav-li"><a href="/" class="tm-nav-link active">Menu</a></li>
+                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_USER')"><a href="/cart"
+                                                                                          class="tm-nav-link">Cart</a>
+                            </li>
+                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_EMPLOYEE')"><a href="/order"
+                                                                                              class="tm-nav-link">Order</a>
+                            </li>
+                            <li class="tm-nav-li" sec:authorize="anonymous"><a href="/login"
+                                                                               class="tm-nav-link">Login</a></li>
+                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_USER')"><a href="/logout"
+                                                                                          class="tm-nav-link">Logout</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -76,7 +85,7 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="path/to/jquery.parallax.js"></script>
+<!--<script src="path/to/jquery.parallax.js"></script>-->
 <script src="js/jquery.min.js"></script>
 <script src="js/parallax.min.js"></script>
 </body>

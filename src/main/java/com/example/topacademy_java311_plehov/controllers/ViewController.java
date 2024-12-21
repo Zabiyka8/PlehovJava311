@@ -31,7 +31,16 @@ public class ViewController {
                 .toList();
 
         model.addAttribute("pizzas", pizzas);
-        return "/ui/pages/index";
+        return "ui/pages/index";
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "ui/pages/login";
+    }
+    @GetMapping("/registration")
+    public String registrationPage() {
+        return "ui/pages/registration";
     }
 
     public String listToString(List<String> list){
