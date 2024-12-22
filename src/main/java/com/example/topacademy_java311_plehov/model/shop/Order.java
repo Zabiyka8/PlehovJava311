@@ -21,17 +21,19 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Set<OrderPosition> orderPositions;
-
-
 
     @ManyToOne
     private Profile profile;
 
     public Order() {
         orderPositions = new HashSet<>();
+    }
+
+    public double getPrice() {
+        return orderPositions.stream()
+                .mapToDouble(orderPosition -> orderPosition.getPizza().getPrice() * orderPosition.getAmount()).sum();
     }
 }

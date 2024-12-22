@@ -5,7 +5,6 @@ import com.example.topacademy_java311_plehov.model.entities.itemAttributes.Statu
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Pizza;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.TechCart;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Topping;
-import com.example.topacademy_java311_plehov.model.secuirty.ApplicationUser;
 import com.example.topacademy_java311_plehov.model.shop.Order;
 import com.example.topacademy_java311_plehov.model.shop.OrderPosition;
 import com.example.topacademy_java311_plehov.model.shop.Profile;
@@ -52,32 +51,48 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public Optional<Order> findCartByUserId(Long profileId) {
-        return repo.findById(profileId);
+        return Optional.ofNullable(repo.findCartByUserId(profileId));
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void addToCart(String email, int pizzaId) {
-        ApplicationUser loggedUser = applicationUserService.loadUserByUsername(email);
-        Optional<Order> optionalCart = findCartByUserId(loggedUser.getProfile().getId());
+        Long userId = applicationUserService.loadUserByUsername(email).getId();
+        Order cart = findCartByUserId(userId).orElseThrow(
+                () -> new IllegalStateException("Корзина не найдена для пользователя")
+        );
+        Pizza pizza = pizzaService.findById(pizzaId).orElseThrow(
+                () -> new IllegalArgumentException("Пицца не найдена")
+        );
+        Optional<OrderPosition> existingPositionOpt = cart.getOrderPositions().stream()
+                .filter(position -> false)
+                .findFirst();
 
-        if (optionalCart.isPresent()) {
-            Order cart = optionalCart.get();
-            Optional<Pizza> stockPositionToBuy = pizzaService.findById(pizzaId);
-
-            if (stockPositionToBuy.isPresent()) {
-                OrderPosition positionToAdd = OrderPosition.builder()
-                        .amount(1)
-                        .pizza(stockPositionToBuy.get())
-                        .order(cart)
-                        .build();
-                addToCart(cart, positionToAdd);
-                repo.save(cart);
-            } else {
-                throw new IllegalArgumentException("Такого товара нет в наличии");
-            }
+        if (existingPositionOpt.isPresent()) {
+            OrderPosition existingPosition = existingPositionOpt.get();
+            existingPosition.setAmount(existingPosition.getAmount() + 1);
+            orderPositionService.save(existingPosition);
         } else {
-            throw new IllegalStateException("Корзина не найдена для пользователя");
+            OrderPosition newPosition = new OrderPosition();
+            newPosition.setPizza(pizza);
+            newPosition.setAmount(1);
+            newPosition.setOrder(cart);
+
+            cart.getOrderPositions().add(newPosition);
+            orderPositionService.save(newPosition);
+        }
+        repo.save(cart);
+    }
+
+    private void addToCart(Order cart, OrderPosition positionToAdd) {
+        if (isStockPositionPresent(cart, positionToAdd)) {
+            OrderPosition positionToIncrementAmount = cart.getOrderPositions().stream()
+                    .filter(orderPosition -> orderPosition.getPizza().getId() == positionToAdd.getPizza().getId())
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Позиция для увеличения не найдена"));
+            positionToIncrementAmount.setAmount(positionToIncrementAmount.getAmount() + 1);
+        } else {
+            cart.getOrderPositions().add(positionToAdd);
         }
     }
 
@@ -90,23 +105,26 @@ public class OrderServiceImplementation implements OrderService {
     @Override
     @Transactional
     public void pay(Order cart) {
-        if (cart != null) {
-            cart.setStatus(Status.IS_PAID);
-            repo.save(cart);
-            removeFromStock(cart);
-            Profile currentProfile = cart.getProfile();
-            currentProfile.getOrders().add(
-                    Order.builder()
-                            .status(Status.CART)
-                            .profile(currentProfile)
-                            .orderPositions(new HashSet<>())
-                            .build()
-            );
-            profileService.save(currentProfile);
-        } else {
-            throw new IllegalArgumentException("Корзина не может быть оплачена, так как не найдена");
-        }
+        cart.setStatus(Status.IS_PAID); // Устанавливаем статус оплачен
+        repo.save(cart); // Сохраняем корзину
+
+        // Удаляем ингредиенты со склада
+        removeFromStock(cart);
+
+        Profile currentProfile = cart.getProfile();
+
+        // Создание новой корзины для пользователя
+        Order newCart = Order.builder()
+                .status(Status.CART) // Статус новой корзины
+                .profile(currentProfile) // Связываем с текущим пользователем
+                .orderPositions(new HashSet<>()) // Инициализируем новую корзину
+                .build();
+
+        // Добавление новой корзины в профиль пользователя
+        currentProfile.getOrders().add(newCart);
+        profileService.save(currentProfile); // Сохраняем профиль
     }
+
 
     private void removeFromStock(Order cart) {
         Set<OrderPosition> orderPositionSet = cart.getOrderPositions();
@@ -134,17 +152,6 @@ public class OrderServiceImplementation implements OrderService {
         // Реализовать логику для доставки заказа
     }
 
-    private void addToCart(Order cart, OrderPosition positionToAdd) {
-        if (isStockPositionPresent(cart, positionToAdd)) {
-            OrderPosition positionToIncrementAmount = cart.getOrderPositions().stream()
-                    .filter(orderPosition -> orderPosition.getPizza().getId() == positionToAdd.getPizza().getId())
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Позиция для увеличения не найдена"));
-            positionToIncrementAmount.setAmount(positionToIncrementAmount.getAmount() + 1);
-        } else {
-            cart.getOrderPositions().add(positionToAdd);
-        }
-    }
 
     private boolean isStockPositionPresent(Order cart, OrderPosition positionToAdd) {
         return cart.getOrderPositions().stream()

@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Simple House</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Cart</title>
     <link rel="stylesheet" href="/styles/style.css"/>
 </head>
 <body>
-
 <div class="container">
 
     <div class="placeholder">
@@ -45,52 +43,65 @@
         </div>
     </div>
 
-
-    <div class="tm-paging-links">
-        <nav>
-            <ul>
-                <li class="tm-paging-item"><a href="#" class="tm-paging-link active">Pizza</a></li>
-                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Sorted by price</a></li>
-                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Sort alphabetically</a></li>
-            </ul>
-        </nav>
+    <div th:if="${cart.orderPositions.isEmpty()}">
+        <h3 class="tm-site-title">Ваша корзина пуста.</h3>
+        <a href="/" class="button_bay">Вернуться в меню</a>
     </div>
+    <div th:unless="${cart.orderPositions.isEmpty()}">
+        <table>
+            <thead>
+            <tr>
+                <th>Фото</th>
+                <th>Наименование</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Итого</th>
+                <th>Действие</th>
+            </tr>
+            </thead>
+            <tbody>
 
-
-    <div class="row tm-gallery">
-        <div id="tm-gallery-page-pizza" class="tm-gallery-page">
-
-            <div th:each="pizza: ${pizzas}">
-
-                <div class="item">
-                    <figure class="col-lg-3 col-md-4 col-sm-6 col-12 tm-gallery-item">
-                        <div class="box_img">
-                            <img th:src="@{'/img/' + ${pizza.name} + '.png'}" class="img-fluid tm-gallery-img"/>
-                        </div>
-                        <figcaption>
-                            <!--                        <div class="pizza_caption">-->
-                            <h4 class="tm-gallery-title">[[${pizza.name}]]</h4>
-                            <!--                        </div>-->
-                            <div class="box_description">
-                                <p class="tm-gallery-description" th:text="${pizza.techCart}"></p>
-                            </div>
-                            <div class="box_price">
-                                <form method="post" action="/cart/add">
-                                    <input type="text" id="input_pizzaId" name="pizzaId" th:value="${pizza.id}" hidden>
-                                    <p class="tm-gallery-price" th:text="${pizza.price + ' &#8381;'}"></p>
-                                    <input type="submit" class="button_bay" sec:authorize="hasRole('ROLE_USER')" value="В корзину">
-                                </form>
-                            </div>
-                        </figcaption>
-                    </figure>
+            <tr th:each="position : ${cart.orderPositions}">
+                <div class="tm-gallery-page">
+                <td>
+                    <img th:src="@{'/img/' + ${position.pizza.name} + '.png'}" class="img-fluid tm-gallery-img"/>
+                </td>
+                <td th:text="${position.pizza.name}"></td>
+                <td th:text="${position.pizza.price} + ' ₽'"></td>
+                <td>
+                    <span th:text="${position.amount}"></span>
+                </td>
+                <td th:text="${position.pizza.price * position.amount} + ' ₽'"></td>
+                <td>
+                    <form method="post" action="/cart/delete">
+                        <input type="hidden" th:value="${position.id}" name="positionId"/>
+                        <button type="submit" class="button_bay">Удалить</button>
+                    </form>
+                </td>
                 </div>
-            </div>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div class="total">
+            <h3>Общая стоимость: <span th:text="${cart.price} + ' ₽'"></span></h3>
         </div>
+
+        <form th:action="@{/cart/pay}" method="post">
+            <button type="submit" class="button_bay">Оплатить</button>
+        </form>
+
+        <form th:action="@{/cart/match}" method="post">
+            <button type="submit" class="button_bay">Собрать заказ</button>
+        </form>
     </div>
+
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/parallax.min.js"></script>
 <script src="js/pizza.js"></script>
 </body>
+
 </html>

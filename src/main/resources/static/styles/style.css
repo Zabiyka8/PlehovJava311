@@ -497,3 +497,8 @@ p, address {
     font-family: 'Jost', sans-serif;
     /* 	background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e); */
 }
+table tbody tr {
+    min-height: 50px;
+    transition: all 0.3s ease;
+    position:sticky;
+}

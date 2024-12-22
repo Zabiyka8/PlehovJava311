@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -31,17 +32,18 @@ public class CartController {
     public String cartPage(Model model) {
         ApplicationUser currentUser = currentApplicationUser();
         Order cart = currentUserCart(currentUser);
-        model.addAttribute("cart", cart);
+
+        model.addAttribute("cart", cart); // Добавлено: добавляем корзину в модель для шаблона
         return "ui/pages/cart";
     }
 
     @PostMapping("/add")
-    @ResponseBody
-    public void addToCart(@RequestParam int pizzaId){
+    public String addToCart(@RequestParam int pizzaId, RedirectAttributes redirectAttributes) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         orderService.addToCart(email, pizzaId);
-    }
 
+        return "redirect:/"; // Переход на главную
+    }
     @PostMapping("/delete")
     public String deletePosition(@RequestParam int positionId) {
         orderPositionService.deleteById(positionId);
@@ -96,7 +98,12 @@ public class CartController {
     private Order currentUserCart(ApplicationUser currentUser) {
         return currentUser.getProfile().getOrders().stream()
                 .filter(o -> o.getStatus().equals(Status.CART))
-                .findFirst().get();
+                .findFirst()
+                .orElseGet(() -> {
+                    Order order = new Order();
+                    order.setOrderPositions(new HashSet<>());
+                    return order;
+                });
     }
 
     private ApplicationUser currentApplicationUser() {
