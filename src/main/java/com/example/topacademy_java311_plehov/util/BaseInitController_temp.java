@@ -121,8 +121,8 @@ public class BaseInitController_temp {
         }
     }
     private void usersInit() {
-        ApplicationUser admin = new ApplicationUser("employee@ya.ru", encoder.encode("user1"));
-        ApplicationUser user = new ApplicationUser("user@ya.ru", encoder.encode("user"));
+        ApplicationUser admin = new ApplicationUser("employee@ya.ru", encoder.encode("user1"),"Советская 7", "Николай");
+        ApplicationUser user = new ApplicationUser("user@ya.ru", encoder.encode("user"), "Пушкинская 5", "Анатолий");
         appUserRepo.save(admin);
         appUserRepo.save(user);
     }

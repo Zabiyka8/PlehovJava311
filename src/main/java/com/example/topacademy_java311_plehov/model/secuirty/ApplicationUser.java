@@ -36,13 +36,15 @@ public class ApplicationUser extends BaseEntity {
     @JoinColumn(name = "user_id")
     private Profile profile;
 
-    public ApplicationUser(String email, String password) {
+    public ApplicationUser(String email, String password, String address, String userName) {
         this.username = "";
         this.password = password;
         this.role = ROLE_USER;
         this.profile = Profile.builder()
                 .user(this)
                 .email(email)
+                .address(address)
+                .name(userName)
                 .orders(new HashSet<>() {{
                     add(Order.builder()
                             .status(Status.CART)

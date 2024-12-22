@@ -18,8 +18,8 @@ public class UserController {
     private final ApplicationUserRepository applicationUserRepository;
 
     @PostMapping("/registration")
-    public String registration(@RequestParam String email,@RequestParam String password){
-        ApplicationUser applicationUser = new ApplicationUser(email,passwordEncoder.encode(password));
+    public String registration(@RequestParam String email,@RequestParam String password, @RequestParam String address, @RequestParam String userName){
+        ApplicationUser applicationUser = new ApplicationUser(email,passwordEncoder.encode(password), address, userName);
         applicationUserRepository.save(applicationUser);
         return "redirect:/";
     }

@@ -37,10 +37,9 @@ public class CartController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String addToCart(@RequestParam int pizzaId){
+    public void addToCart(@RequestParam int pizzaId){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         orderService.addToCart(email, pizzaId);
-        return "redirect:/";
     }
 
     @PostMapping("/delete")
