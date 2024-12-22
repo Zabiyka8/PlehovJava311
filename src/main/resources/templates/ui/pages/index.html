@@ -50,8 +50,8 @@
         <nav>
             <ul>
                 <li class="tm-paging-item"><a href="#" class="tm-paging-link active">Pizza</a></li>
-                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Salad</a></li>
-                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Noodle</a></li>
+                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Sorted by price</a></li>
+                <li class="tm-paging-item"><a href="#" class="tm-paging-link">Sort alphabetically</a></li>
             </ul>
         </nav>
     </div>
@@ -76,22 +76,22 @@
                             </div>
                             <div class="box_price">
                                 <form method="post" action="/cart/add">
-                                    <input type="text" name="pizzaId" th:value="${pizza.id}" hidden>
+                                    <input type="text" id="input_pizzaId" name="pizzaId" th:value="${pizza.id}" hidden>
                                     <p class="tm-gallery-price" th:text="${pizza.price + ' &#8381;'}"></p>
-                                    <input type="submit" class="button_bay">
+<!--                                <button class="button_bay" sec:authorize="hasRole('ROLE_USER')">В корзину</button>-->
+                                    <input type="submit" class="button_bay" sec:authorize="hasRole('ROLE_USER')">
                                 </form>
                             </div>
                         </figcaption>
                     </figure>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!--<script src="path/to/jquery.parallax.js"></script>-->
 <script src="js/jquery.min.js"></script>
 <script src="js/parallax.min.js"></script>
+<script src="js/pizza.js"></script>
 </body>
 </html>
