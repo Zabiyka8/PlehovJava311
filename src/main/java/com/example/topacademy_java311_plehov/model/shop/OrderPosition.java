@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class OrderPosition extends BaseEntity {
     @Column(name = "amount")
-    private Integer quantity;
+    private Integer amount;
 
     @ManyToOne
     private Order order;

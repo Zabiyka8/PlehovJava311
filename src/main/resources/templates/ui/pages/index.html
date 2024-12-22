@@ -13,7 +13,7 @@
 
     <div class="placeholder">
         <div class="parallax-window" data-parallax="scroll" data-image-src="img/simple-house-01.jpg">
-                <div class="tm-header">
+            <div class="tm-header">
                 <div class="row tm-header-inner">
                     <div class="col-md-6 col-12">
                         <img src="" alt="Logo" class="tm-site-logo"/>
@@ -73,8 +73,14 @@
                                 <p class="tm-gallery-description" th:text="${pizza.techCart}"></p>
                             </div>
                             <div class="box_price">
-                                <p class="tm-gallery-price" th:text="${pizza.price + ' &#8381;'}"></p>
-                                <button class="button_bay">В корзину</button>
+                                <form method="post" action="/cart/add">
+                                    <input type="text" name="pizzaId" th:value="${pizza.id}" hidden>
+                                    <p class="tm-gallery-price" th:text="${pizza.price + ' &#8381;'}"></p>
+                                    <!--                                <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">-->
+                                    <!--                                    +-->
+                                    <!--                                </div>-->
+                                    <button class="button_bay">В корзину</button>
+                                </form>
                             </div>
                         </figcaption>
                     </figure>

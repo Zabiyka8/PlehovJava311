@@ -40,4 +40,10 @@ public class IngredientServiceImplementation implements IngredientService {
         Optional<Ingredient> ingredientOptional = repo.findByName(name);
         return ingredientOptional.orElse(null);
     }
+
+    @Override
+    public void remove(Ingredient ingredient, int amount) {
+        ingredient.setInStock(ingredient.getInStock() - amount);
+        repo.save(ingredient);
+    }
 }
