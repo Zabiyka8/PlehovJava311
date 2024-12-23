@@ -16,10 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,23 +63,20 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public void addToCart(String email, int pizzaId) {
+        ApplicationUser loggedUser = applicationUserService.loadUserByUsername(email);
+        Order cart = findCartByUserId(loggedUser.getProfile().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Корзина не найдена"));
 
-            ApplicationUser loggedUser = applicationUserService.loadUserByUsername(email);
-            Order cart = findCartByUserId(loggedUser.getProfile().getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Корзина не найдена"));
+        Optional<Pizza> stockPositionToBuy = Optional.ofNullable(pizzaService.findById(pizzaId)
+                .orElseThrow(() -> new IllegalArgumentException("Такого товара нет в наличии")));
 
-            Optional<Pizza> stockPositionToBuy = Optional.ofNullable(pizzaService.findById(pizzaId)
-                    .orElseThrow(() -> new IllegalArgumentException("Такого товара нет в наличии")));
-
-            OrderPosition positionToAdd = OrderPosition.builder()
-                    .amount(1)
-                    .pizza(stockPositionToBuy.get())
-                    .order(cart)
-                    .build();
-
-            addToCart(cart, positionToAdd);
-            repo.save(cart);
-
+        OrderPosition positionToAdd = OrderPosition.builder()
+                .amount(1)
+                .pizza(stockPositionToBuy.get())
+                .order(cart)
+                .build();
+        addToCart(cart, positionToAdd);
+        repo.save(cart);
     }
 
     private void addToCart(Order cart, OrderPosition positionToAdd) {
@@ -150,8 +148,9 @@ public class OrderServiceImplementation implements OrderService {
         orderToDeliver.setStatus(Status.IS_DELIVERED);
         repo.save(orderToDeliver);
         String subject = "Заказ оплачен";
-        String messageBody = "Вас привецтвует Simple House," +
-                "/nЗаказ будет доставлен по адресу: " + orderToDeliver.getProfile().getAddress();
+        String messageBody =
+                "Вас беспокоит Simple House, " +
+                "/nЗаказ оплачен и будет доставлен по адресу: " + orderToDeliver.getProfile().getAddress();
         String emailTo = orderToDeliver.getProfile().getEmail();
         sendDeliveryEmail(subject, emailTo, messageBody);
     }
