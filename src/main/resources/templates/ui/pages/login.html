@@ -4,48 +4,16 @@
 <head>
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="slide navbar style.css">
-    <!--    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">-->
     <link rel="stylesheet" href="/styles/style.css"/>
 </head>
 <body>
 <div class="container">
 
-    <div class="placeholder">
-        <div class="parallax-window" data-parallax="scroll" data-image-src="img/simple-house-01.jpg">
-            <div class="tm-header">
-                <div class="row tm-header-inner">
-                    <div class="col-md-6 col-12">
-                        <img src="img/simple-house-logo.png" alt="Logo" class="tm-site-logo"/>
-                        <div class="tm-site-text-box">
-                            <h1 class="tm-site-title">Simple House</h1>
-                            <h6 class="tm-site-description">new restaurant template</h6>
-                        </div>
-                    </div>
-                    <nav class="col-md-6 col-12 tm-nav">
-                        <ul class="tm-nav-ul">
-                            <li class="tm-nav-li"><a href="/" class="tm-nav-link active">Menu</a></li>
-                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_USER')"><a href="/cart"
-                                                                                          class="tm-nav-link">Cart</a>
-                            </li>
-                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_EMPLOYEE')"><a href="/order"
-                                                                                              class="tm-nav-link">Order</a>
-                            </li>
-                            <li class="tm-nav-li" sec:authorize="anonymous"><a href="/login"
-                                                                               class="tm-nav-link">Login</a></li>
-                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_USER')"><a href="/logout"
-                                                                                          class="tm-nav-link">Logout</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
+    <th:block th:insert="~{/ui/pages/layouts/header.html::header}"/>
 
     <div class="bodyLogin">
         <div class="main">
             <input type="checkbox" id="chk" aria-hidden="true">
-
             <div>
                 <form class="signup" method="post" action="/registration">
                     <label for="chk" aria-hidden="true">Sign up</label>

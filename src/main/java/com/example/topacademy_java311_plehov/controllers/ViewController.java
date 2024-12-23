@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ViewController {
     private final TechCartService techCartService;
 
     @GetMapping
-    public String index(Model model){
+    public String index(Model model, RedirectAttributes ra){
         List<PizzaDTO> pizzas = pizzaService.findAll().stream()
                 .map(pizza -> PizzaDTO.builder()
                         .price(pizza.getPrice())
@@ -29,7 +30,7 @@ public class ViewController {
                         .techCart(listToString(techCartService.findTechCartByPizzaId(pizza.getId())))
                         .build())
                 .toList();
-
+        ra.addFlashAttribute("payError", "Пица добавлена в корзину");
         model.addAttribute("pizzas", pizzas);
         return "ui/pages/index";
     }

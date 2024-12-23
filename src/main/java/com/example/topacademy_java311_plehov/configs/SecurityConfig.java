@@ -36,6 +36,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/login").anonymous()
+                                .requestMatchers("/manager").hasRole("EMPLOYEE")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form ->

@@ -5,29 +5,35 @@ import com.example.topacademy_java311_plehov.model.entities.itemAttributes.Statu
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Pizza;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.TechCart;
 import com.example.topacademy_java311_plehov.model.entities.stock.entities.Topping;
+import com.example.topacademy_java311_plehov.model.secuirty.ApplicationUser;
 import com.example.topacademy_java311_plehov.model.shop.Order;
 import com.example.topacademy_java311_plehov.model.shop.OrderPosition;
 import com.example.topacademy_java311_plehov.model.shop.Profile;
 import com.example.topacademy_java311_plehov.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImplementation implements OrderService {
+    @Value("${spring.mail.username}")
+    private String emailFrom;
     private final OrderRepository repo;
     private final ApplicationUserService applicationUserService;
     private final OrderPositionService orderPositionService;
     private final PizzaService pizzaService;
     private final ProfileService profileService;
     private final IngredientService ingredientService;
+    private final JavaMailSender mailSender;
 
     @Override
     public List<Order> findAll() {
@@ -55,33 +61,24 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    @Transactional
     public void addToCart(String email, int pizzaId) {
-        Long userId = applicationUserService.loadUserByUsername(email).getId();
-        Order cart = findCartByUserId(userId).orElseThrow(
-                () -> new IllegalStateException("Корзина не найдена для пользователя")
-        );
-        Pizza pizza = pizzaService.findById(pizzaId).orElseThrow(
-                () -> new IllegalArgumentException("Пицца не найдена")
-        );
-        Optional<OrderPosition> existingPositionOpt = cart.getOrderPositions().stream()
-                .filter(position -> false)
-                .findFirst();
 
-        if (existingPositionOpt.isPresent()) {
-            OrderPosition existingPosition = existingPositionOpt.get();
-            existingPosition.setAmount(existingPosition.getAmount() + 1);
-            orderPositionService.save(existingPosition);
-        } else {
-            OrderPosition newPosition = new OrderPosition();
-            newPosition.setPizza(pizza);
-            newPosition.setAmount(1);
-            newPosition.setOrder(cart);
+            ApplicationUser loggedUser = applicationUserService.loadUserByUsername(email);
+            Order cart = findCartByUserId(loggedUser.getProfile().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Корзина не найдена"));
 
-            cart.getOrderPositions().add(newPosition);
-            orderPositionService.save(newPosition);
-        }
-        repo.save(cart);
+            Optional<Pizza> stockPositionToBuy = Optional.ofNullable(pizzaService.findById(pizzaId)
+                    .orElseThrow(() -> new IllegalArgumentException("Такого товара нет в наличии")));
+
+            OrderPosition positionToAdd = OrderPosition.builder()
+                    .amount(1)
+                    .pizza(stockPositionToBuy.get())
+                    .order(cart)
+                    .build();
+
+            addToCart(cart, positionToAdd);
+            repo.save(cart);
+
     }
 
     private void addToCart(Order cart, OrderPosition positionToAdd) {
@@ -149,10 +146,27 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public void deliver(int orderId) {
-        // Реализовать логику для доставки заказа
+        Order orderToDeliver = repo.findById((long) orderId).get();
+        orderToDeliver.setStatus(Status.IS_DELIVERED);
+        repo.save(orderToDeliver);
+        String subject = "Заказ оплачен";
+        String messageBody = "Вас привецтвует Simple House," +
+                "/nЗаказ будет доставлен по адресу: " + orderToDeliver.getProfile().getAddress();
+        String emailTo = orderToDeliver.getProfile().getEmail();
+        sendDeliveryEmail(subject, emailTo, messageBody);
     }
-
-
+    private void sendDeliveryEmail(String subject, String emailTo, String messageBody) {
+        SimpleMailMessage message = createMailMessage(subject, emailTo, messageBody);
+        mailSender.send(message);
+    }
+    private SimpleMailMessage createMailMessage(String subject, String emailTo, String messageBody) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(emailTo);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(messageBody);
+        mailMessage.setFrom(emailFrom);
+        return mailMessage;
+    }
     private boolean isStockPositionPresent(Order cart, OrderPosition positionToAdd) {
         return cart.getOrderPositions().stream()
                 .anyMatch(orderPosition -> orderPosition.getPizza().getId() == positionToAdd.getPizza().getId());

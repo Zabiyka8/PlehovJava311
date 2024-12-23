@@ -3,8 +3,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Simple House</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet"/>
     <link rel="stylesheet" href="/styles/style.css"/>
@@ -12,40 +10,7 @@
 <body>
 
 <div class="container">
-
-    <div class="placeholder">
-        <div class="parallax-window" data-parallax="scroll" data-image-src="img/simple-house-01.jpg">
-            <div class="tm-header">
-                <div class="row tm-header-inner">
-                    <div class="col-md-6 col-12">
-                        <img src="img/simple-house-logo.png" alt="Logo" class="tm-site-logo"/>
-                        <div class="tm-site-text-box">
-                            <h1 class="tm-site-title">Simple House</h1>
-                            <h6 class="tm-site-description">new restaurant template</h6>
-                        </div>
-                    </div>
-                    <nav class="col-md-6 col-12 tm-nav">
-                        <ul class="tm-nav-ul">
-                            <li class="tm-nav-li"><a href="/" class="tm-nav-link active">Menu</a></li>
-                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_USER')"><a href="/cart"
-                                                                                          class="tm-nav-link">Cart</a>
-                            </li>
-                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_EMPLOYEE')"><a href="/order"
-                                                                                              class="tm-nav-link">Order</a>
-                            </li>
-                            <li class="tm-nav-li" sec:authorize="anonymous"><a href="/login"
-                                                                               class="tm-nav-link">Login</a></li>
-                            <li class="tm-nav-li" sec:authorize="hasRole('ROLE_USER')"><a href="/logout"
-                                                                                          class="tm-nav-link">Logout</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <th:block th:insert="~{/ui/pages/layouts/header.html::header}"/>
     <div class="tm-paging-links">
         <nav>
             <ul>
@@ -76,9 +41,10 @@
                             </div>
                             <div class="box_price">
                                 <form method="post" action="/cart/add">
-                                    <input type="text" id="input_pizzaId" name="pizzaId" th:value="${pizza.id}" hidden>
+                                    <input type="text" name="pizzaId" th:value="${pizza.id}" hidden>
                                     <p class="tm-gallery-price" th:text="${pizza.price + ' &#8381;'}"></p>
-                                    <input type="submit" class="button_bay" sec:authorize="hasRole('ROLE_USER')" value="В корзину">
+                                    <input type="submit" class="button_bay" sec:authorize="hasRole('ROLE_USER')"
+                                           value="В корзину">
                                 </form>
                             </div>
                         </figcaption>

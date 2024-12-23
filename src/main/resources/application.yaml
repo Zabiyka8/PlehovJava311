@@ -10,6 +10,13 @@ spring:
     generate-ddl: true
     show-sql: true
 
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    protocol: smtps
+    username: klozevitz.test@yandex.ru
+    password: gnnijvcaadwjfmfp
+
 server:
   port: 8080
 

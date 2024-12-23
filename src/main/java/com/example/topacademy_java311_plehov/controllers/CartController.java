@@ -36,14 +36,19 @@ public class CartController {
         model.addAttribute("cart", cart); // Добавлено: добавляем корзину в модель для шаблона
         return "ui/pages/cart";
     }
-
     @PostMapping("/add")
-    public String addToCart(@RequestParam int pizzaId, RedirectAttributes redirectAttributes) {
+    public String addToCart(@RequestParam int pizzaId, RedirectAttributes ra) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        orderService.addToCart(email, pizzaId);
-
-        return "redirect:/"; // Переход на главную
+        try {
+            orderService.addToCart(email, pizzaId);
+            ra.addFlashAttribute("success", "Пицца добавлена в корзину!");
+            return "redirect:/";
+        } catch (IllegalArgumentException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+            return "redirect:/";
+        }
     }
+
     @PostMapping("/delete")
     public String deletePosition(@RequestParam int positionId) {
         orderPositionService.deleteById(positionId);
