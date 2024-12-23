@@ -32,7 +32,7 @@ public class Pizza extends BaseEntity {
     private Type type;
 
 
-    @OneToOne(mappedBy = "pizza")
+    @ManyToOne
     private OrderPosition orderPosition;
 
     @OneToMany(cascade = CascadeType.ALL)

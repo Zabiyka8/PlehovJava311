@@ -38,7 +38,7 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public List<Order> findAll() {
-        return repo.findAll(); // Реализовать метод поиска всех заказов
+        return repo.findAll();
     }
 
     @Override
@@ -62,24 +62,25 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public void addToCart(String email, int pizzaId) {
+    @Transactional
+    public void addToCart(String email, int pizzaId){
         ApplicationUser loggedUser = applicationUserService.loadUserByUsername(email);
         Order cart = findCartByUserId(loggedUser.getProfile().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Корзина не найдена"));
 
         Optional<Pizza> stockPositionToBuy = Optional.ofNullable(pizzaService.findById(pizzaId)
                 .orElseThrow(() -> new IllegalArgumentException("Такого товара нет в наличии")));
-
         OrderPosition positionToAdd = OrderPosition.builder()
                 .amount(1)
                 .pizza(stockPositionToBuy.get())
                 .order(cart)
                 .build();
-        addToCart(cart, positionToAdd);
+        addToCartPosiyion(cart, positionToAdd);
+        System.out.println(cart.getOrderPositions());
         repo.save(cart);
     }
 
-    private void addToCart(Order cart, OrderPosition positionToAdd) {
+    private void addToCartPosiyion(Order cart, OrderPosition positionToAdd) {
         if (isStockPositionPresent(cart, positionToAdd)) {
             OrderPosition positionToIncrementAmount = cart.getOrderPositions().stream()
                     .filter(orderPosition -> orderPosition.getPizza().getId() == positionToAdd.getPizza().getId())
@@ -100,26 +101,18 @@ public class OrderServiceImplementation implements OrderService {
     @Override
     @Transactional
     public void pay(Order cart) {
-        cart.setStatus(Status.IS_PAID); // Устанавливаем статус оплачен
-        repo.save(cart); // Сохраняем корзину
-
-        // Удаляем ингредиенты со склада
+        cart.setStatus(Status.IS_PAID);
+        repo.save(cart);
         removeFromStock(cart);
-
         Profile currentProfile = cart.getProfile();
-
-        // Создание новой корзины для пользователя
         Order newCart = Order.builder()
-                .status(Status.CART) // Статус новой корзины
-                .profile(currentProfile) // Связываем с текущим пользователем
-                .orderPositions(new HashSet<>()) // Инициализируем новую корзину
+                .status(Status.CART)
+                .profile(currentProfile)
+                .orderPositions(new HashSet<>())
                 .build();
-
-        // Добавление новой корзины в профиль пользователя
         currentProfile.getOrders().add(newCart);
-        profileService.save(currentProfile); // Сохраняем профиль
+        profileService.save(currentProfile);
     }
-
 
     private void removeFromStock(Order cart) {
         Set<OrderPosition> orderPositionSet = cart.getOrderPositions();

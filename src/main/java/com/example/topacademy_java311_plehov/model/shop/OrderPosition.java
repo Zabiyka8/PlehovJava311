@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.mapping.ToOne;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class OrderPosition extends BaseEntity {
     @ManyToOne
     private Order order;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "pizza_id")
     private Pizza pizza;
 
@@ -38,6 +39,7 @@ public class OrderPosition extends BaseEntity {
 
 
     public OrderPosition() {
+//        pizza = new HashSet<>();
         toppings = new HashSet<>();
     }
 }

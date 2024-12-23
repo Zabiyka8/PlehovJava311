@@ -15,5 +15,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Order findCartByUserId(Long profileId);
     @Query(value = "SELECT * FROM order_t WHERE status = 'IS_PAID';", nativeQuery = true)
     List<Order> ordersToDeliver();
-
 }
